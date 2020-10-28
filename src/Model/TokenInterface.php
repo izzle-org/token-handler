@@ -20,9 +20,20 @@ interface TokenInterface
     public function setToken(string $token): self;
 
     /**
-     * @return int
+     * @return string|null
      */
-    public function getExpires(): int;
+    public function getRefreshToken(): ?string;
+
+    /**
+     * @param string $refreshToken
+     * @return $this
+     */
+    public function setRefreshToken(string $refreshToken): self;
+
+    /**
+     * @return int|null
+     */
+    public function getExpires(): ?int;
 
     /**
      * @param int $expires

@@ -14,12 +14,12 @@ class FileHandler implements HandlerInterface
      * @var string
      */
     protected string $path;
-    
+
     /**
      * @var EncrypterContract
      */
     protected EncrypterContract $encrypter;
-    
+
     /**
      * FileHandler constructor.
      * @param string $path
@@ -32,11 +32,11 @@ class FileHandler implements HandlerInterface
         if (!is_writable($path)) {
             throw new InvalidArgumentException(sprintf('Path (%s) is not writable', $path));
         }
-        
+
         $this->path = $path;
         $this->encrypter = $encrypter;
     }
-    
+
     /**
      * @param string|null $ownerId
      * @return TokenInterface|null
@@ -46,29 +46,29 @@ class FileHandler implements HandlerInterface
         if ($this->isLocked($ownerId)) {
             return null;
         }
-        
+
         if (!file_exists($this->filePath($ownerId))) {
             return null;
         }
-        
+
         $content = file_get_contents($this->filePath($ownerId));
         if ($content === false) {
             return null;
         }
-        
+
         $json = $this->encrypter->decrypt($content, false);
         if ($json === null) {
             return null;
         }
-        
+
         $data = json_decode($json, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             return null;
         }
-        
+
         return new Token($data);
     }
-    
+
     /**
      * @param string[] $ownerIds
      * @return array
@@ -76,24 +76,24 @@ class FileHandler implements HandlerInterface
     public function loadTokens(array $ownerIds): array
     {
         $tokens = [];
-        
+
         /** @var string $ownerId */
         foreach ($ownerIds as $ownerId) {
             if ($this->isLocked($ownerId)) {
                 continue;
             }
-            
+
             $token = $this->loadToken($ownerId);
             if ($token === null) {
                 continue;
             }
-            
+
             $tokens[] = $token;
         }
-        
+
         return $tokens;
     }
-    
+
     /**
      * @param int $seconds - Expires in
      * @return TokenInterface[]
@@ -106,20 +106,25 @@ class FileHandler implements HandlerInterface
             if (is_dir($file)) {
                 continue;
             }
-            
-            if (filemtime($file) <= time() + $seconds) {
-                $ownerId = pathinfo($file, PATHINFO_FILENAME);
-                if ($this->isLocked($ownerId)) {
-                    continue;
-                }
-                
-                $tokens[] = $this->loadToken(pathinfo($file, PATHINFO_FILENAME));
+
+            $ownerId = pathinfo($file, PATHINFO_FILENAME);
+            if ($this->isLocked($ownerId)) {
+                continue;
+            }
+
+            $token = $this->loadToken(pathinfo($file, PATHINFO_FILENAME));
+            if ($token === null) {
+                continue;
+            }
+
+            if ($token->getExpires() !== null && $token->getExpires() <= time() + $seconds) {
+                $tokens[] = $token;
             }
         }
-        
+
         return $tokens;
     }
-    
+
     /**
      * @param TokenInterface $token
      * @param string|null $ownerId
@@ -131,15 +136,15 @@ class FileHandler implements HandlerInterface
         if (json_last_error() !== JSON_ERROR_NONE) {
             return false;
         }
-        
+
         $content = $this->encrypter->encrypt($json, false);
         if ($content === false) {
             return false;
         }
-        
+
         return file_put_contents($this->filePath($ownerId), $content) !== false;
     }
-    
+
     /**
      * @param string|null $ownerId
      * @return bool
@@ -149,10 +154,10 @@ class FileHandler implements HandlerInterface
         if (!file_exists($this->filePath($ownerId))) {
             return true;
         }
-        
+
         return unlink($this->filePath($ownerId));
     }
-    
+
     /**
      * @param string|null $ownerId
      * @return bool
@@ -161,7 +166,7 @@ class FileHandler implements HandlerInterface
     {
         return file_put_contents($this->getLockPath($ownerId), '') !== false;
     }
-    
+
     /**
      * @param string|null $ownerId
      * @return bool
@@ -171,10 +176,10 @@ class FileHandler implements HandlerInterface
         if (!file_exists($this->getLockPath($ownerId))) {
             return true;
         }
-        
+
         return unlink($this->getLockPath($ownerId));
     }
-    
+
     /**
      * @param string|null $ownerId
      * @return bool
@@ -183,7 +188,7 @@ class FileHandler implements HandlerInterface
     {
         return file_exists($this->getLockPath($ownerId));
     }
-    
+
     /**
      * @return string
      */
@@ -191,7 +196,7 @@ class FileHandler implements HandlerInterface
     {
         return $this->path;
     }
-    
+
     /**
      * @return EncrypterContract
      */
@@ -199,7 +204,7 @@ class FileHandler implements HandlerInterface
     {
         return $this->encrypter;
     }
-    
+
     /**
      * @param string|null $ownerId
      * @return string
@@ -208,7 +213,7 @@ class FileHandler implements HandlerInterface
     {
         return sprintf('%s%s%s', $this->path, DIRECTORY_SEPARATOR, $ownerId ?? 'token');
     }
-    
+
     /**
      * @param string|null $ownerId
      * @return string
@@ -219,7 +224,7 @@ class FileHandler implements HandlerInterface
         if ($ownerId !== null) {
             $file = $ownerId . '.locked';
         }
-        
+
         return sprintf('%s%s%s', $this->path, DIRECTORY_SEPARATOR, $file);
     }
 }

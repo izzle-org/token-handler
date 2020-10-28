@@ -5,7 +5,6 @@ namespace Izzle\TokenHandler\Model;
 use Izzle\TokenHandler\Exceptions\UnserializeException;
 use InvalidArgumentException;
 use JsonSerializable;
-use RuntimeException;
 use Serializable;
 
 /**
@@ -30,9 +29,9 @@ class Token implements TokenInterface, JsonSerializable, Serializable
     protected ?string $refreshToken = null;
 
     /**
-     * @var int
+     * @var int|null
      */
-    protected int $expires;
+    protected ?int $expires = null;
 
     /**
      * @var string
@@ -60,7 +59,7 @@ class Token implements TokenInterface, JsonSerializable, Serializable
     /**
      * @inheritDoc
      */
-    public function getRefreshToken(): string
+    public function getRefreshToken(): ?string
     {
         return $this->{self::PROP_REFRESH_TOKEN};
     }
@@ -78,7 +77,7 @@ class Token implements TokenInterface, JsonSerializable, Serializable
     /**
      * @inheritDoc
      */
-    public function getExpires(): int
+    public function getExpires(): ?int
     {
         return $this->{self::PROP_EXPIRES};
     }
@@ -128,12 +127,19 @@ class Token implements TokenInterface, JsonSerializable, Serializable
      */
     public function fromArray(array $data): self
     {
-        foreach ([self::PROP_TOKEN, self::PROP_EXPIRES, self::PROP_OWNER_ID] as $prop) {
+        foreach ([self::PROP_TOKEN, self::PROP_OWNER_ID] as $prop) {
             if (empty($data[$prop])) {
                 throw new InvalidArgumentException('Required option not passed: ' . $prop);
             }
 
             $this->{$prop} = $data[$prop];
+        }
+
+        // Can be null
+        if (isset($data[self::PROP_EXPIRES])) {
+            $this->{self::PROP_EXPIRES} = $data[self::PROP_EXPIRES] !== null ?
+                (int) $data[self::PROP_EXPIRES] :
+                $data[self::PROP_EXPIRES];
         }
 
         if (!empty($data[self::PROP_REFRESH_TOKEN])) {
@@ -193,8 +199,8 @@ class Token implements TokenInterface, JsonSerializable, Serializable
     {
         $expires = $this->getExpires();
 
-        if (empty($expires)) {
-            throw new RuntimeException('"expires" is not set on the token');
+        if ($expires === null) {
+            return false;
         }
 
         return $expires < time();
