@@ -95,15 +95,26 @@ class TokenTest extends Test
     public function testTokenCanExpire(): void
     {
         $token = $this->getToken();
-        $this->assertEquals(false, $token->hasExpired());
+        $this->assertFalse($token->hasExpired());
 
         $token = $this->getToken('token_expired.json');
-        $this->assertEquals(true, $token->hasExpired());
+        $this->assertTrue($token->hasExpired());
 
         $token->setExpires(time());
-        $this->assertEquals(false, $token->hasExpired());
+        $this->assertFalse($token->hasExpired());
 
         $token->setExpires(time() - 1);
-        $this->assertEquals(true, $token->hasExpired());
+        $this->assertTrue($token->hasExpired());
+    }
+
+    public function testTokenCanNotExpire(): void
+    {
+        $token = new Token([
+            Token::PROP_TOKEN => '12345',
+            Token::PROP_OWNER_ID => 'foobar'
+        ]);
+
+        $this->assertNull($token->getExpires());
+        $this->assertFalse($token->hasExpired());
     }
 }

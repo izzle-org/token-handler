@@ -2,7 +2,7 @@
 
 ## Installation
 
-> Using npm:
+> Using composer:
  ```shell
  $ composer require izzle/token-handler
  ```
