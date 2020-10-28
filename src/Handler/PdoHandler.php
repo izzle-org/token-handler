@@ -325,6 +325,7 @@ class PdoHandler implements HandlerInterface
      * @param string|null $ownerId
      * @param bool $isLocked
      * @return bool
+     * @throws PDOException
      */
     protected function updateLock(?string $ownerId, bool $isLocked): bool
     {
@@ -341,7 +342,11 @@ class PdoHandler implements HandlerInterface
         $stmt->bindParam(':locked', $isLocked, PDO::PARAM_BOOL);
         $stmt->bindParam(':ownerId', $ownerId);
 
-        return $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new PDOException(implode(PHP_EOL, $this->pdo->errorInfo()), $this->pdo->errorCode());
+        }
+
+        return true;
     }
 
     /**
