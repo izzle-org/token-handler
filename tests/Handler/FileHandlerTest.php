@@ -47,7 +47,7 @@ class FileHandlerTest extends Test
     {
         $fileHandler = new FileHandler(self::getPath(), new Encrypter(self::$key));
 
-        $this->assertInstanceOf(FileHandler::class, $fileHandler);
+        self::assertInstanceOf(FileHandler::class, $fileHandler);
     }
 
     public function testInstantiationMustThrow(): void
@@ -60,15 +60,15 @@ class FileHandlerTest extends Test
     public function testCanGetEncrypter(): void
     {
         $handler = self::getFileHandler();
-        $this->assertNotNull($handler->getEncrypter());
+        self::assertNotNull($handler->getEncrypter());
     }
 
     public function testCanGetPath(): void
     {
         $handler = self::getFileHandler();
-        $this->assertNotNull($handler->getPath());
-        $this->assertIsString($handler->getPath());
-        $this->assertFileExists($handler->getPath());
+        self::assertNotNull($handler->getPath());
+        self::assertIsString($handler->getPath());
+        self::assertFileExists($handler->getPath());
     }
 
     public function testCanSaveToken(): void
@@ -76,8 +76,8 @@ class FileHandlerTest extends Test
         $fileHandler = self::getFileHandler();
         $token = $this->getToken();
 
-        $this->assertTrue($fileHandler->saveToken($token, self::$ownerId));
-        $this->assertFileExists($fileHandler->getPath() . DIRECTORY_SEPARATOR . self::$ownerId);
+        self::assertTrue($fileHandler->saveToken($token, self::$ownerId));
+        self::assertFileExists($fileHandler->getPath() . DIRECTORY_SEPARATOR . self::$ownerId);
     }
 
     public function testCanLoadToken(): void
@@ -87,8 +87,8 @@ class FileHandlerTest extends Test
 
         $token = $fileHandler->loadToken(self::$ownerId);
 
-        $this->assertInstanceOf(TokenInterface::class, $token);
-        $this->assertEquals($this->getToken(), $token);
+        self::assertInstanceOf(TokenInterface::class, $token);
+        self::assertEquals($this->getToken(), $token);
     }
 
     public function testCanRemoveToken(): void
@@ -96,8 +96,8 @@ class FileHandlerTest extends Test
         $fileHandler = self::getFileHandler();
         $fileHandler->saveToken($this->getToken(), self::$ownerId);
 
-        $this->assertTrue($fileHandler->removeToken(self::$ownerId));
-        $this->assertFileNotExists($fileHandler->getPath() . DIRECTORY_SEPARATOR . self::$ownerId);
+        self::assertTrue($fileHandler->removeToken(self::$ownerId));
+        self::assertFileDoesNotExist($fileHandler->getPath() . DIRECTORY_SEPARATOR . self::$ownerId);
     }
 
     public function testCanLoadTokens(): void
@@ -108,7 +108,7 @@ class FileHandlerTest extends Test
         $handler->saveToken($this->getToken(), '5');
 
         $tokens = $handler->loadTokens([self::$ownerId, '5']);
-        $this->assertCount(2, $tokens);
+        self::assertCount(2, $tokens);
     }
 
     public function testCanLockToken(): void
@@ -116,10 +116,10 @@ class FileHandlerTest extends Test
         $fileHandler = self::getFileHandler();
 
         $fileHandler->saveToken($this->getToken(), self::$ownerId);
-        $this->assertTrue($fileHandler->lockToken(self::$ownerId));
-        $this->assertNull($fileHandler->loadToken(self::$ownerId));
-        $this->assertTrue($fileHandler->unlockToken(self::$ownerId));
-        $this->assertEquals($this->getToken(), $fileHandler->loadToken(self::$ownerId));
+        self::assertTrue($fileHandler->lockToken(self::$ownerId));
+        self::assertNull($fileHandler->loadToken(self::$ownerId));
+        self::assertTrue($fileHandler->unlockToken(self::$ownerId));
+        self::assertEquals($this->getToken(), $fileHandler->loadToken(self::$ownerId));
     }
 
     public function testCanLoadTokensThatExpiresIn(): void
@@ -144,7 +144,7 @@ class FileHandlerTest extends Test
         $handler->saveToken($token, $token->getOwnerId());
 
         $tokens = $handler->loadTokensThatExpiresIn(300);
-        $this->assertIsArray($tokens);
-        $this->assertCount(3, $tokens);
+        self::assertIsArray($tokens);
+        self::assertCount(3, $tokens);
     }
 }

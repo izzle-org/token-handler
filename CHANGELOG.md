@@ -3,6 +3,10 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.1.0 (2021-01-14)
+
+    * feature [Global] Added PHP 8.0 support
+
 * 0.0.4 (2020-10-28)
 
     * feature [PdoHandler] The Pdo handler will now throw more PDO Exceptions on error

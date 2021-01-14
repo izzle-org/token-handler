@@ -45,7 +45,7 @@ class PdoHandlerTest extends Test
     {
         $handler = new PdoHandler(self::$db, new Encrypter(self::$key));
 
-        $this->assertInstanceOf(PdoHandler::class, $handler);
+        self::assertInstanceOf(PdoHandler::class, $handler);
     }
 
     public function testCanBeInstantiatedWithOptions(): void
@@ -54,20 +54,20 @@ class PdoHandlerTest extends Test
             'table' => 'foobar',
         ]);
 
-        $this->assertInstanceOf(PdoHandler::class, $handler);
-        $this->assertEquals($handler->getTable(), 'foobar');
+        self::assertInstanceOf(PdoHandler::class, $handler);
+        self::assertEquals($handler->getTable(), 'foobar');
     }
 
     public function testCanGetEncrypter(): void
     {
         $handler = self::getPdoHandler();
-        $this->assertNotNull($handler->getEncrypter());
+        self::assertNotNull($handler->getEncrypter());
     }
 
     public function testCanGetDatabase(): void
     {
         $handler = self::getPdoHandler();
-        $this->assertNotNull($handler->getPdo());
+        self::assertNotNull($handler->getPdo());
     }
 
     public function testCanSaveToken(): void
@@ -77,7 +77,7 @@ class PdoHandlerTest extends Test
 
         $handler->saveToken($token, self::$ownerId);
 
-        $this->assertTrue($handler->saveToken($token, self::$ownerId));
+        self::assertTrue($handler->saveToken($token, self::$ownerId));
 
         // Nullable expire time
         $token = new Token([
@@ -95,14 +95,14 @@ class PdoHandlerTest extends Test
 
         $token = $handler->loadToken(self::$ownerId);
 
-        $this->assertInstanceOf(TokenInterface::class, $token);
-        $this->assertEquals($this->getToken(), $token);
+        self::assertInstanceOf(TokenInterface::class, $token);
+        self::assertEquals($this->getToken(), $token);
     }
 
     public function testCanRemoveToken(): void
     {
         $handler = self::getPdoHandler();
-        $this->assertTrue($handler->removeToken(self::$ownerId));
+        self::assertTrue($handler->removeToken(self::$ownerId));
     }
 
     public function testCanLoadTokens(): void
@@ -113,7 +113,7 @@ class PdoHandlerTest extends Test
         $handler->saveToken($this->getToken(), '5');
 
         $tokens = $handler->loadTokens([self::$ownerId, '5']);
-        $this->assertCount(2, $tokens);
+        self::assertCount(2, $tokens);
     }
 
     public function testCanLockToken(): void
@@ -121,10 +121,10 @@ class PdoHandlerTest extends Test
         $handler = self::getPdoHandler();
 
         $handler->saveToken($this->getToken(), self::$ownerId);
-        $this->assertTrue($handler->lockToken(self::$ownerId));
-        $this->assertNull($handler->loadToken(self::$ownerId));
-        $this->assertTrue($handler->unlockToken(self::$ownerId));
-        $this->assertEquals($this->getToken(), $handler->loadToken(self::$ownerId));
+        self::assertTrue($handler->lockToken(self::$ownerId));
+        self::assertNull($handler->loadToken(self::$ownerId));
+        self::assertTrue($handler->unlockToken(self::$ownerId));
+        self::assertEquals($this->getToken(), $handler->loadToken(self::$ownerId));
     }
 
     public function testCanLoadTokensThatExpiresIn(): void
@@ -149,7 +149,7 @@ class PdoHandlerTest extends Test
         $handler->saveToken($token, $token->getOwnerId());
 
         $tokens = $handler->loadTokensThatExpiresIn(300);
-        $this->assertIsArray($tokens);
-        $this->assertCount(3, $tokens);
+        self::assertIsArray($tokens);
+        self::assertCount(3, $tokens);
     }
 }
