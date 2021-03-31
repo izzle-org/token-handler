@@ -52,7 +52,7 @@ class FileHandler implements HandlerInterface
         }
 
         $content = file_get_contents($this->filePath($ownerId));
-        if ($content === false) {
+        if ($content === false || empty($content)) {
             return null;
         }
 

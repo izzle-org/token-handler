@@ -151,7 +151,7 @@ class PdoHandler implements HandlerInterface
 
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if ($data === false) {
-            return null;
+            return [];
         }
 
         $tokens = [];
@@ -191,7 +191,7 @@ class PdoHandler implements HandlerInterface
 
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if ($data === false) {
-            return null;
+            return [];
         }
 
         $tokens = [];
