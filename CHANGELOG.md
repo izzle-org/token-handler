@@ -3,6 +3,11 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.1.1 (2021-03-31)
+
+    * feature [Handler] Added NullHandler
+    * change [FileHandler] Hardened FileHandler in case of empty token files
+
 * 0.1.0 (2021-01-14)
 
     * feature [Global] Added PHP 8.0 support

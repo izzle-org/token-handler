@@ -2,6 +2,7 @@
 
 namespace Izzle\TokenHandler\Tests\Handler;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use InvalidArgumentException;
 use Illuminate\Encryption\Encrypter;
 use Izzle\TokenHandler\Handler\FileHandler;
@@ -146,5 +147,24 @@ class FileHandlerTest extends Test
         $tokens = $handler->loadTokensThatExpiresIn(300);
         self::assertIsArray($tokens);
         self::assertCount(3, $tokens);
+    }
+
+    /**
+     * @depends testCanSaveToken
+     */
+    public function testCanLoadEmptyFiles(): void
+    {
+        $handler = self::getFileHandler();
+
+        file_put_contents($handler->filePath(self::$ownerId), '');
+
+        $accessToken = $handler->loadToken(self::$ownerId);
+
+        self::assertNull($accessToken);
+
+        file_put_contents($handler->filePath(self::$ownerId), '{}');
+
+        $this->expectException(DecryptException::class);
+        $handler->loadToken(self::$ownerId);
     }
 }
