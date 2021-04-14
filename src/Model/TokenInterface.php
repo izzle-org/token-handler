@@ -2,11 +2,14 @@
 
 namespace Izzle\TokenHandler\Model;
 
+use JsonSerializable;
+use Serializable;
+
 /**
  * Interface TokenInterface
  * @package Izzle\TokenHandler\Model
  */
-interface TokenInterface
+interface TokenInterface extends JsonSerializable, Serializable
 {
     /**
      * @return string
@@ -58,7 +61,9 @@ interface TokenInterface
     public function hasExpired(): bool;
 
     /**
-     * @return string
+     * Returns additional vendor values stored in the token.
+     *
+     * @return array
      */
-    public function __toString();
+    public function getValues(): array;
 }

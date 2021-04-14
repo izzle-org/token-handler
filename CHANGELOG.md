@@ -3,6 +3,11 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.2.0 (2021-04-14)
+
+    * feature [TokenInterface] Added additional getValues method
+    * change [TokenInterface] Implements JsonSerializable and Serializable
+
 * 0.1.1 (2021-03-31)
 
     * feature [Handler] Added NullHandler
