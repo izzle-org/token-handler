@@ -11,7 +11,7 @@ use Serializable;
  * Class Token
  * @package Izzle\TokenHandler\Model
  */
-class Token implements TokenInterface, JsonSerializable, Serializable
+class Token implements TokenInterface
 {
     public const PROP_TOKEN = 'token';
     public const PROP_REFRESH_TOKEN = 'refreshToken';
@@ -212,5 +212,13 @@ class Token implements TokenInterface, JsonSerializable, Serializable
     public function __toString()
     {
         return $this->getToken();
+    }
+
+    /**
+     * @return array
+     */
+    public function getValues(): array
+    {
+        return $this->toArray();
     }
 }
