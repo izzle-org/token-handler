@@ -117,4 +117,21 @@ class TokenTest extends Test
         self::assertNull($token->getExpires());
         self::assertFalse($token->hasExpired());
     }
+
+    public function testTokenCanHasToArrayMethod(): void
+    {
+        $token = new Token([
+            Token::PROP_TOKEN => '12345',
+            Token::PROP_OWNER_ID => 'foobar'
+        ]);
+
+        $data = $token->toArray();
+
+        foreach ([Token::PROP_TOKEN, Token::PROP_REFRESH_TOKEN, Token::PROP_EXPIRES, Token::PROP_OWNER_ID] as $key) {
+            self::assertArrayHasKey($key, $data);
+        }
+
+        self::assertEquals('12345', $data[Token::PROP_TOKEN]);
+        self::assertEquals('foobar', $data[Token::PROP_OWNER_ID]);
+    }
 }
