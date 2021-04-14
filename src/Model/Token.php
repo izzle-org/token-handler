@@ -4,8 +4,6 @@ namespace Izzle\TokenHandler\Model;
 
 use Izzle\TokenHandler\Exceptions\UnserializeException;
 use InvalidArgumentException;
-use JsonSerializable;
-use Serializable;
 
 /**
  * Class Token
@@ -212,13 +210,5 @@ class Token implements TokenInterface
     public function __toString()
     {
         return $this->getToken();
-    }
-
-    /**
-     * @return array
-     */
-    public function getValues(): array
-    {
-        return $this->toArray();
     }
 }

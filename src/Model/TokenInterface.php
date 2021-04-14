@@ -65,5 +65,5 @@ interface TokenInterface extends JsonSerializable, Serializable
      *
      * @return array
      */
-    public function getValues(): array;
+    public function toArray(): array;
 }

@@ -3,6 +3,11 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.2.1 (2021-04-14)
+
+    * change [TokenInterface] Removed getValues method
+    * change [TokenInterface] Added toArray
+
 * 0.2.0 (2021-04-14)
 
     * feature [TokenInterface] Added additional getValues method
