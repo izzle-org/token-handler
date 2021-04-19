@@ -3,6 +3,11 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.3.0 (2021-04-19)
+
+    * change [Token] / [TokenInterface] Methods setRefreshToken and setExpires can now be null
+    * change [Token] / [TokenInterface] Owner Id cannot be empty ('', '0')
+
 * 0.2.1 (2021-04-14)
 
     * change [TokenInterface] Removed getValues method

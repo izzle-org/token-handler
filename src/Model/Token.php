@@ -65,7 +65,7 @@ class Token implements TokenInterface
     /**
      * @inheritDoc
      */
-    public function setRefreshToken(string $refreshToken): self
+    public function setRefreshToken(?string $refreshToken): self
     {
         $this->{self::PROP_REFRESH_TOKEN} = $refreshToken;
 
@@ -83,7 +83,7 @@ class Token implements TokenInterface
     /**
      * @inheritDoc
      */
-    public function setExpires(int $expires): self
+    public function setExpires(?int $expires): self
     {
         $this->{self::PROP_EXPIRES} = $expires;
 
@@ -103,6 +103,10 @@ class Token implements TokenInterface
      */
     public function setOwnerId(string $ownerId): self
     {
+        if (empty($ownerId)) {
+            throw new InvalidArgumentException('Required ownerId cannot be empty!');
+        }
+
         $this->{self::PROP_OWNER_ID} = $ownerId;
 
         return $this;
