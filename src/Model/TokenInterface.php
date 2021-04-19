@@ -28,10 +28,10 @@ interface TokenInterface extends JsonSerializable, Serializable
     public function getRefreshToken(): ?string;
 
     /**
-     * @param string $refreshToken
+     * @param string|null $refreshToken
      * @return $this
      */
-    public function setRefreshToken(string $refreshToken): self;
+    public function setRefreshToken(?string $refreshToken): self;
 
     /**
      * @return int|null
@@ -39,10 +39,10 @@ interface TokenInterface extends JsonSerializable, Serializable
     public function getExpires(): ?int;
 
     /**
-     * @param int $expires
+     * @param int|null $expires
      * @return $this
      */
-    public function setExpires(int $expires): self;
+    public function setExpires(?int $expires): self;
 
     /**
      * @return string
@@ -50,7 +50,7 @@ interface TokenInterface extends JsonSerializable, Serializable
     public function getOwnerId(): string;
 
     /**
-     * @param string $ownerId
+     * @param string $ownerId - Cannot be empty!
      * @return $this
      */
     public function setOwnerId(string $ownerId): self;

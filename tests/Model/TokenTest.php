@@ -38,6 +38,12 @@ class TokenTest extends Test
         self::assertEquals(2524608000, $token->getExpires());
         self::assertEquals('13AB', $token->getOwnerId());
 
+        // OwnerId can't be "0"
+        $this->expectException(InvalidArgumentException::class);
+        $data = json_decode($this->loadMock(), true);
+        $data[Token::PROP_OWNER_ID] = '0';
+        $token->fromArray($data);
+
         $this->expectException(InvalidArgumentException::class);
         $token->fromArray([
             Token::PROP_TOKEN => '2342'
@@ -105,6 +111,9 @@ class TokenTest extends Test
 
         $token->setExpires(time() - 1);
         self::assertTrue($token->hasExpired());
+
+        $token->setExpires(null);
+        self::assertFalse($token->hasExpired());
     }
 
     public function testTokenCanNotExpire(): void
@@ -133,5 +142,30 @@ class TokenTest extends Test
 
         self::assertEquals('12345', $data[Token::PROP_TOKEN]);
         self::assertEquals('foobar', $data[Token::PROP_OWNER_ID]);
+    }
+
+    public function testOwnerIdCannotBeEmpty(): void
+    {
+        $token = new Token([
+            Token::PROP_TOKEN => '12345',
+            Token::PROP_OWNER_ID => 'foobar'
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $token->setOwnerId('0');
+
+        $this->expectException(InvalidArgumentException::class);
+        $token->setOwnerId('');
+    }
+
+    public function testRefreshTokenCanBeNull(): void
+    {
+        $token = new Token([
+            Token::PROP_TOKEN => '12345',
+            Token::PROP_OWNER_ID => 'foobar'
+        ]);
+
+        $token->setRefreshToken(null);
+        self::assertNull($token->getRefreshToken());
     }
 }
