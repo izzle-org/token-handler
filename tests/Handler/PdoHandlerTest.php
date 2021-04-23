@@ -97,6 +97,11 @@ class PdoHandlerTest extends Test
 
         self::assertInstanceOf(TokenInterface::class, $token);
         self::assertEquals($this->getToken(), $token);
+
+        self::assertEquals('12345', $token->getToken());
+        self::assertEquals(2524608000, $token->getExpires());
+        self::assertEquals('13AB', $token->getOwnerId());
+        self::assertEquals(['foo' => 'bar', 'x' => 3], $token->getMeta());
     }
 
     public function testCanRemoveToken(): void

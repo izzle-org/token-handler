@@ -37,6 +37,7 @@ class TokenTest extends Test
         self::assertEquals('12345', $token->getToken());
         self::assertEquals(2524608000, $token->getExpires());
         self::assertEquals('13AB', $token->getOwnerId());
+        self::assertEquals(['foo' => 'bar', 'x' => 3], $token->getMeta());
 
         // OwnerId can't be "0"
         $this->expectException(InvalidArgumentException::class);
@@ -63,6 +64,7 @@ class TokenTest extends Test
         self::assertEquals('12345', $token->getToken());
         self::assertEquals(2524608000, $token->getExpires());
         self::assertEquals('13AB', $token->getOwnerId());
+        self::assertEquals(['foo' => 'bar', 'x' => 3], $token->getMeta());
 
         $this->expectException(InvalidArgumentException::class);
         new Token([
@@ -85,6 +87,7 @@ class TokenTest extends Test
         self::assertEquals('12345', $t->getToken());
         self::assertEquals(2524608000, $t->getExpires());
         self::assertEquals('13AB', $t->getOwnerId());
+        self::assertEquals(['foo' => 'bar', 'x' => 3], $t->getMeta());
     }
 
     public function testTokenCanBeSerialized(): void
@@ -96,6 +99,7 @@ class TokenTest extends Test
         self::assertEquals('12345', $t->getToken());
         self::assertEquals(2524608000, $t->getExpires());
         self::assertEquals('13AB', $t->getOwnerId());
+        self::assertEquals(['foo' => 'bar', 'x' => 3], $t->getMeta());
     }
 
     public function testTokenCanExpire(): void
@@ -136,7 +140,14 @@ class TokenTest extends Test
 
         $data = $token->toArray();
 
-        foreach ([Token::PROP_TOKEN, Token::PROP_REFRESH_TOKEN, Token::PROP_EXPIRES, Token::PROP_OWNER_ID] as $key) {
+        foreach (
+            [
+                Token::PROP_TOKEN,
+                Token::PROP_REFRESH_TOKEN,
+                Token::PROP_EXPIRES,
+                Token::PROP_OWNER_ID,
+                Token::PROP_META
+            ] as $key) {
             self::assertArrayHasKey($key, $data);
         }
 
@@ -167,5 +178,17 @@ class TokenTest extends Test
 
         $token->setRefreshToken(null);
         self::assertNull($token->getRefreshToken());
+    }
+
+    public function testTokenCanHoldMetaInformation(): void
+    {
+        $token = new Token([
+            Token::PROP_TOKEN => '12345',
+            Token::PROP_OWNER_ID => 'foobar'
+        ]);
+
+        $token->setMeta(['foo' => 'bar']);
+
+        self::assertEquals(['foo' => 'bar'], $token->getMeta());
     }
 }
