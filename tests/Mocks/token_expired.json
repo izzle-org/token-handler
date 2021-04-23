@@ -1,5 +1,9 @@
 {
     "token": "56789",
     "expires": 1557229587,
-    "ownerId": "13AB"
+    "ownerId": "13AB",
+    "meta": {
+        "foo": "bar",
+        "x": 3
+    }
 }

@@ -15,6 +15,7 @@ class Token implements TokenInterface
     public const PROP_REFRESH_TOKEN = 'refreshToken';
     public const PROP_EXPIRES = 'expires';
     public const PROP_OWNER_ID = 'ownerId';
+    public const PROP_META = 'meta';
 
     /**
      * @var string
@@ -35,6 +36,11 @@ class Token implements TokenInterface
      * @var string
      */
     protected string $ownerId;
+
+    /**
+     * @var array
+     */
+    protected array $meta = [];
 
     /**
      * @inheritDoc
@@ -113,6 +119,25 @@ class Token implements TokenInterface
     }
 
     /**
+     * @return array
+     */
+    public function getMeta(): array
+    {
+        return $this->{self::PROP_META};
+    }
+
+    /**
+     * @param array $meta
+     * @return $this
+     */
+    public function setMeta(array $meta): self
+    {
+        $this->{self::PROP_META} = $meta;
+
+        return $this;
+    }
+
+    /**
      * Token constructor.
      * @param array $data
      */
@@ -148,6 +173,10 @@ class Token implements TokenInterface
             $this->{self::PROP_REFRESH_TOKEN} = $data[self::PROP_REFRESH_TOKEN];
         }
 
+        if (!empty($data[self::PROP_META])) {
+            $this->{self::PROP_META} = $data[self::PROP_META];
+        }
+
         return $this;
     }
 
@@ -157,7 +186,14 @@ class Token implements TokenInterface
     public function toArray(): array
     {
         $data = [];
-        foreach ([self::PROP_TOKEN, self::PROP_REFRESH_TOKEN, self::PROP_EXPIRES, self::PROP_OWNER_ID] as $prop) {
+        foreach (
+            [
+                self::PROP_TOKEN,
+                self::PROP_REFRESH_TOKEN,
+                self::PROP_EXPIRES,
+                self::PROP_OWNER_ID,
+                self::PROP_META
+            ] as $prop) {
             $data[$prop] = $this->{$prop};
         }
 
