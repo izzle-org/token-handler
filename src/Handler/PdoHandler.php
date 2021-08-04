@@ -363,7 +363,7 @@ class PdoHandler implements HandlerInterface
      */
     protected function checkDatabase(): bool
     {
-        $rows = $this->pdo->exec('
+        $this->pdo->exec('
             CREATE TABLE IF NOT EXISTS `' . $this->table . '` (
                 `' . self::COLUMN_OWNER_ID . '` VARCHAR(255) NOT NULL,
                 `' . self::COLUMN_ACCESS_TOKEN . '` TEXT NOT NULL,
@@ -373,11 +373,6 @@ class PdoHandler implements HandlerInterface
                 PRIMARY KEY (`' . self::COLUMN_OWNER_ID . '`)
             );
         '); // ENGINE = InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_general_ci please :)
-        // INDEX(`' . self::COLUMN_LOCKED . '`,`' . self::COLUMN_EXPIRES . '`)
-
-        if ($rows === false) {
-            throw new PDOException(sprintf('Could not verify table %s. Please check your connection.', $this->table));
-        }
 
         return true;
     }

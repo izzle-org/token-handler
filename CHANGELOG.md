@@ -3,6 +3,10 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.4.1 (2021-08-04)
+
+    * change [Handler] Unnecessary row check at checkDatabase has been removed from PdoHandler
+
 * 0.4.0 (2021-04-23)
 
     * feature [Token] / [TokenInterface] Token and Tokeninterface can now hold meta information
