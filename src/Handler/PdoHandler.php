@@ -73,14 +73,18 @@ class PdoHandler implements HandlerInterface
      * @param PDO $pdo
      * @param EncrypterContract $encrypter
      * @param array $options
+     * @param bool $checkDatabase
      */
-    public function __construct(PDO $pdo, EncrypterContract $encrypter, array $options = [])
+    public function __construct(PDO $pdo, EncrypterContract $encrypter, array $options = [], bool $checkDatabase = true)
     {
         $this->pdo = $pdo;
         $this->encrypter = $encrypter;
 
         $this->configure($options);
-        $this->checkDatabase();
+
+        if ($checkDatabase) {
+            $this->checkDatabase();
+        }
     }
 
     /**
@@ -363,7 +367,7 @@ class PdoHandler implements HandlerInterface
      */
     protected function checkDatabase(): bool
     {
-        $this->pdo->exec('
+        return $this->pdo->exec('
             CREATE TABLE IF NOT EXISTS `' . $this->table . '` (
                 `' . self::COLUMN_OWNER_ID . '` VARCHAR(255) NOT NULL,
                 `' . self::COLUMN_ACCESS_TOKEN . '` TEXT NOT NULL,
@@ -372,9 +376,7 @@ class PdoHandler implements HandlerInterface
                 `' . self::COLUMN_ERROR_COUNT . '` TINYINT NOT NULL,
                 PRIMARY KEY (`' . self::COLUMN_OWNER_ID . '`)
             );
-        '); // ENGINE = InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_general_ci please :)
-
-        return true;
+        ') === true; // ENGINE = InnoDB CHARSET=utf8mb4 COLLATE utf8mb4_general_ci please :)
     }
 
     /**
