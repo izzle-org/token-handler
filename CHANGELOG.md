@@ -3,6 +3,10 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.4.2 (2021-08-09)
+
+    * change [Handler] Added additional checkDatabase Parameter in PdoHandler
+
 * 0.4.1 (2021-08-04)
 
     * change [Handler] Unnecessary row check at checkDatabase has been removed from PdoHandler
