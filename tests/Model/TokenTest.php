@@ -17,10 +17,22 @@ class TokenTest extends Test
         self::assertInstanceOf(TokenInterface::class, $token);
     }
 
+    /**
+     * @throws \JsonException
+     */
     public function testTokenImplementsJsonSerializable(): void
     {
         $token = new Token();
+        $token->setOwnerId('13AB')
+            ->setToken('12345')
+            ->setExpires(2524608000)
+            ->setMeta(['foo' => 'bar', 'x' => 3]);
+
         self::assertInstanceOf(JsonSerializable::class, $token);
+        $json = file_get_contents(__DIR__ . '/../Mocks/token.json');
+        $data = json_decode($json);
+
+        self::assertEquals(json_encode($data), json_encode($token, JSON_THROW_ON_ERROR));
     }
 
     public function testTokenImplementsSerializable(): void

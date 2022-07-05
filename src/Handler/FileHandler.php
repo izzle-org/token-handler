@@ -52,7 +52,7 @@ class FileHandler implements HandlerInterface
         }
 
         $content = file_get_contents($this->filePath($ownerId));
-        if ($content === false || empty($content)) {
+        if (empty($content)) {
             return null;
         }
 
@@ -77,7 +77,6 @@ class FileHandler implements HandlerInterface
     {
         $tokens = [];
 
-        /** @var string $ownerId */
         foreach ($ownerIds as $ownerId) {
             if ($this->isLocked($ownerId)) {
                 continue;
@@ -97,7 +96,6 @@ class FileHandler implements HandlerInterface
     /**
      * @param int $seconds - Expires in
      * @return TokenInterface[]
-     * @throws NotImplementedException
      */
     public function loadTokensThatExpiresIn(int $seconds): array
     {

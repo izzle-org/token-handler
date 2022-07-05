@@ -3,6 +3,10 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.4.3 (2022-07-05)
+
+    * change [All] Added PHP 8.1 compatibility
+
 * 0.4.2 (2021-08-09)
 
     * change [Handler] Added additional checkDatabase Parameter in PdoHandler
