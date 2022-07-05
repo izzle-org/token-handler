@@ -151,6 +151,7 @@ class Token implements TokenInterface
     /**
      * @param array $data
      * @return $this
+     * @throws InvalidArgumentException
      */
     public function fromArray(array $data): self
     {
@@ -201,6 +202,24 @@ class Token implements TokenInterface
     }
 
     /**
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->fromArray($data);
+    }
+
+    /**
      * @inheritDoc
      */
     public function serialize()
@@ -211,6 +230,7 @@ class Token implements TokenInterface
     /**
      * @inheritDoc
      * @throws UnserializeException
+     * @throws InvalidArgumentException
      */
     public function unserialize($serialized)
     {
@@ -225,7 +245,7 @@ class Token implements TokenInterface
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return $this->toArray();
     }

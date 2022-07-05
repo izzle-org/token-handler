@@ -16,7 +16,7 @@
         }
     },
     "require": {
-        "php": ">=7.4",
+        "php": "^7.4|^8.0",
         "illuminate/encryption": "^8.22.1",
         "ext-json": "*",
         "ext-pdo": "*"
