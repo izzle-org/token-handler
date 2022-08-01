@@ -245,7 +245,8 @@ class Token implements TokenInterface
     /**
      * @inheritDoc
      */
-    public function jsonSerialize(): mixed
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
     {
         return $this->toArray();
     }
