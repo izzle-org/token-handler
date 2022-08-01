@@ -3,6 +3,10 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 0.4.4 (2022-08-01)
+    
+    * bug [Token] Fixed jsonSerialize return value on Token Model
+
 * 0.4.3 (2022-07-05)
 
     * change [All] Added PHP 8.1 compatibility
