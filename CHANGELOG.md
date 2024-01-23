@@ -3,6 +3,11 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 1.0.0 (2024-01-23)
+    
+    * change [Global] Push to new illuminate/encryption version
+    * change [Global] Drop PHP 7.4 Support
+
 * 0.4.4 (2022-08-01)
     
     * bug [Token] Fixed jsonSerialize return value on Token Model
