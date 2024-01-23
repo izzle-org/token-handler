@@ -2,9 +2,10 @@
 
 namespace Izzle\TokenHandler\Handler;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
+use Illuminate\Contracts\Encryption\EncryptException;
 use InvalidArgumentException;
-use Izzle\TokenHandler\Exceptions\NotImplementedException;
 use Izzle\TokenHandler\Model\Token;
 use Izzle\TokenHandler\Model\TokenInterface;
 
@@ -24,6 +25,7 @@ class FileHandler implements HandlerInterface
      * FileHandler constructor.
      * @param string $path
      * @param EncrypterContract $encrypter
+     * @throws InvalidArgumentException
      */
     public function __construct(
         string $path,
@@ -39,6 +41,7 @@ class FileHandler implements HandlerInterface
 
     /**
      * @param string|null $ownerId
+     * @throws DecryptException
      * @return TokenInterface|null
      */
     public function loadToken(?string $ownerId): ?TokenInterface
@@ -126,6 +129,7 @@ class FileHandler implements HandlerInterface
     /**
      * @param TokenInterface $token
      * @param string|null $ownerId
+     * @throws EncryptException
      * @return bool
      */
     public function saveToken(TokenInterface $token, ?string $ownerId): bool
@@ -136,7 +140,7 @@ class FileHandler implements HandlerInterface
         }
 
         $content = $this->encrypter->encrypt($json, false);
-        if ($content === false) {
+        if ($content === '') {
             return false;
         }
 
