@@ -3,6 +3,11 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes)
 
+* 2.0.0 (2025-10-27)
+    
+    * change [Global] Drop PHP 8.1 Support
+    * change [Global] Push to new illuminate/encryption version
+
 * 1.0.0 (2024-01-23)
     
     * change [Global] Push to new illuminate/encryption version
